@@ -7,14 +7,11 @@ async function run() {
   try {
     const tagName = core.getInput('tag_name', { required: true }).replace('refs/tags/', '')
     const releaseName = core.getInput('release_name', { required: true }).replace('refs/tags/', '')
+    const assetGlob = core.getInput('asset_glob', { required: true })
 
     const {releaseId, uploadUrl} = await createDraftRelease(tagName, releaseName)
 
-    const assetPath = core.getInput('asset_path', { required: true })
-    const assetName = core.getInput('asset_name', { required: true })
-    const assetContentType = core.getInput('asset_content_type', { required: true })
-
-    await uploadReleaseAsset(uploadUrl, assetName, assetPath, assetContentType)
+    await uploadReleaseAsset(uploadUrl, assetGlob)
 
     await publishRelease(releaseId)
   } catch (error) {
