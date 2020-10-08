@@ -1,4 +1,4 @@
-import {GitHub} from '@actions/github'
+import {context, getOctokit} from '@actions/github'
 import * as fs from 'fs'
 import {PathLike} from 'fs'
 import * as glob from 'glob'
@@ -7,8 +7,9 @@ import * as mime from 'mime-types'
 
 const contentLength = (filePath: PathLike) => fs.statSync(filePath).size
 
-export async function run(uploadUrl: string, assetGlob: string) {
-  const github = new GitHub(process.env.GITHUB_TOKEN)
+export async function run(release_id: number, assetGlob: string) {
+  const github = getOctokit(process.env.GITHUB_TOKEN)
+  const {owner, repo} = context.repo
   const assetFiles = glob.sync(assetGlob)
 
   for (let assetFile of assetFiles) {
@@ -18,12 +19,14 @@ export async function run(uploadUrl: string, assetGlob: string) {
     }
 
     // API Documentation: https://developer.github.com/v3/repos/releases/#upload-a-release-asset
-    // Octokit Documentation: https://octokit.github.io/rest.js/#octokit-routes-repos-upload-release-asset
+    // Octokit Documentation: https://octokit.github.io/rest.js/v18/#repos
     await github.repos.uploadReleaseAsset({
-      url: uploadUrl,
+      owner,
+      repo,
+      release_id,
       headers,
       name: path.basename(assetFile),
-      file: fs.readFileSync(assetFile)
+      data: fs.readFileSync(assetFile)
     })
   }
 }

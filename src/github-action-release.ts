@@ -9,9 +9,9 @@ export async function run() {
     const releaseName = core.getInput('release_name', { required: true }).replace('refs/tags/', '')
     const assetGlob = core.getInput('asset_glob', { required: true })
 
-    const {releaseId, uploadUrl} = await createDraftRelease(tagName, releaseName)
+    const {releaseId} = await createDraftRelease(tagName, releaseName)
 
-    await uploadReleaseAsset(uploadUrl, assetGlob)
+    await uploadReleaseAsset(releaseId, assetGlob)
 
     await publishRelease(releaseId)
   } catch (error) {
