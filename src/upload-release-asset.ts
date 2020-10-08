@@ -1,12 +1,13 @@
-const { GitHub } = require('@actions/github')
-const fs = require('fs')
-const glob = require('glob')
-const path = require('path')
-const mime = require('mime-types')
+import {GitHub} from '@actions/github'
+import * as fs from 'fs'
+import {PathLike} from 'fs'
+import * as glob from 'glob'
+import * as path from 'path'
+import * as mime from 'mime-types'
 
-const contentLength = filePath => fs.statSync(filePath).size
+const contentLength = (filePath: PathLike) => fs.statSync(filePath).size
 
-async function run(uploadUrl, assetGlob) {
+export async function run(uploadUrl: string, assetGlob: string) {
   const github = new GitHub(process.env.GITHUB_TOKEN)
   const assetFiles = glob.sync(assetGlob)
 
@@ -26,5 +27,3 @@ async function run(uploadUrl, assetGlob) {
     })
   }
 }
-
-module.exports = run

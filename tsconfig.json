@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "CommonJS",
+    "target": "ES2019",
+    "noImplicitAny": true,
+    "removeComments": true
+  }
+}

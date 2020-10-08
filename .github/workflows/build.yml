@@ -1,0 +1,36 @@
+name: build
+
+on: [push]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up build environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache Node Modules Directory
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node
+
+      - name: Build Project
+        run: npm ci && npm run build
+
+      - name: Test Project
+        uses: ksokol/github-release-action@master
+        with:
+          tag_name: ${{ github.ref }}-${{ github.sha }}
+          release_name: ${{ github.sha }}
+          asset_glob: dist/index.js

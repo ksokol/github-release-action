@@ -1,6 +1,6 @@
-const {GitHub, context} = require('@actions/github')
+import {GitHub, context} from '@actions/github'
 
-async function run(tagName, releaseName) {
+export async function run(tagName: string, releaseName: string) {
   const github = new GitHub(process.env.GITHUB_TOKEN)
   const { owner, repo } = context.repo
 
@@ -25,5 +25,3 @@ async function run(tagName, releaseName) {
     uploadUrl
   }
 }
-
-module.exports = run

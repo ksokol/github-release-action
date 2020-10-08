@@ -1,9 +1,9 @@
-const core = require('@actions/core')
-const createDraftRelease = require('./create-draft-release')
-const uploadReleaseAsset = require('./upload-release-asset')
-const publishRelease = require('./publish-release')
+import * as core from '@actions/core'
+import {run as createDraftRelease} from './create-draft-release'
+import {run as uploadReleaseAsset} from './upload-release-asset'
+import {run as publishRelease} from './publish-release'
 
-async function run() {
+export async function run() {
   try {
     const tagName = core.getInput('tag_name', { required: true }).replace('refs/tags/', '')
     const releaseName = core.getInput('release_name', { required: true }).replace('refs/tags/', '')
@@ -18,5 +18,3 @@ async function run() {
     core.setFailed(error.message)
   }
 }
-
-module.exports = run
