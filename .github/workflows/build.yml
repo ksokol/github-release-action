@@ -19,12 +19,6 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Cache Node Modules Directory
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: node
-
       - name: Build Project
         run: npm ci && npm run build
 
